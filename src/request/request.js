@@ -7,6 +7,30 @@ import successHandler from './successHandler';
 axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;
 
+axios.interceptors.request.use(
+  (config) => {
+    let token = localStorage.getItem('token');
+
+    if (token) {
+      try {
+        token = JSON.parse(token); // Only parse if token exists
+      } catch (error) {
+        console.error("Error parsing token from localStorage:", error);
+        token = null; 
+      }
+    }
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+
 const request = {
   create: async ({ entity, jsonData }) => {
     try {
@@ -20,6 +44,7 @@ const request = {
       return errorHandler(error);
     }
   },
+  
   createAndUpload: async ({ entity, jsonData }) => {
     try {
       const response = await axios.post(entity + '/create', jsonData, {
@@ -36,6 +61,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   read: async ({ entity, id }) => {
     try {
       const response = await axios.get(entity + '/read/' + id);
@@ -48,6 +74,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   update: async ({ entity, id, jsonData }) => {
     try {
       const response = await axios.patch(entity + '/update/' + id, jsonData);
@@ -60,6 +87,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   updateAndUpload: async ({ entity, id, jsonData }) => {
     try {
       const response = await axios.patch(entity + '/update/' + id, jsonData, {
@@ -114,14 +142,12 @@ const request = {
         query += key + '=' + options[key] + '&';
       }
       query = query.slice(0, -1);
-      // headersInstance.cancelToken = source.token;
       const response = await axios.get(entity + '/search' + query);
 
       successHandler(response, {
         notifyOnSuccess: false,
         notifyOnFailed: false,
       });
-            console.log("Response", response.data)
       return response.data;
 
     } catch (error) {
@@ -148,6 +174,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   listAll: async ({ entity, options = {} }) => {
     try {
       let query = '?';
@@ -171,12 +198,12 @@ const request = {
   post: async ({ entity, jsonData }) => {
     try {
       const response = await axios.post(entity, jsonData);
-
       return response.data;
     } catch (error) {
       return errorHandler(error);
     }
   },
+
   get: async ({ entity }) => {
     try {
       const response = await axios.get(entity);
@@ -185,6 +212,7 @@ const request = {
       return errorHandler(error);
     }
   },
+
   patch: async ({ entity, jsonData }) => {
     try {
       const response = await axios.patch(entity, jsonData);
@@ -267,4 +295,5 @@ const request = {
     }
   },
 };
+
 export default request;

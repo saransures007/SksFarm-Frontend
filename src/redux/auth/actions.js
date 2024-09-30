@@ -18,6 +18,7 @@ export const login =
         isSuccess: true,
       };
       window.localStorage.setItem('auth', JSON.stringify(auth_state));
+      window.localStorage.setItem('token', JSON.stringify(data.token));
       window.localStorage.removeItem('isLogout');
       dispatch({
         type: actionTypes.REQUEST_SUCCESS,
