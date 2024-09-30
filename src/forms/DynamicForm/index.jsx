@@ -11,11 +11,11 @@ import { generate as uniqueId } from 'shortid';
 import { countryList } from '@/utils/countryList';
 import { selectLangDirection } from '@/redux/translate/selectors';
 import { useSelector } from 'react-redux';
+import dayjs from 'dayjs';
 
 export default function DynamicForm({ fields, isUpdateForm = false }) {
   const [feedback, setFeedback] = useState();
   const langDirection = useSelector(selectLangDirection);
-  console.log("error")
   return (
     <div style={{ direction: langDirection }}>
       {Object.keys(fields).map((key) => {
@@ -343,15 +343,16 @@ function FormElement({ field, feedback, setFeedback }) {
       <Switch
         checkedChildren={<CheckOutlined />}
         unCheckedChildren={<CloseOutlined />}
-        defaultValue={true}
+        defaultValue={false}
       />
     ),
     date: (
-      <DatePicker
+     <DatePicker
         placeholder={translate('select_date')}
         style={{ width: '100%' }}
-        format={dateFormat}
-      />
+        showTime
+        format="YYYY-MM-DD HH:mm:ss"
+        initialValue={field.initialValue || dayjs()}></DatePicker>
     ),
     async: (
       <SelectAsync
@@ -408,6 +409,8 @@ function FormElement({ field, feedback, setFeedback }) {
       <Form.Item
         label={translate(field.label)}
         name={field.name}
+        initialValue={field.initialValue && field.type === 'date' ? field.initialValue : undefined}
+        // defaultValue={field.defaultValue && field.type === 'boolean' ? field.defaultValue : undefined}
         rules={[
           {
             required: field.required || false,

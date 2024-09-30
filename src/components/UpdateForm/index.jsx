@@ -130,6 +130,14 @@ export default function UpdateForm({ config, formElements, withUpload = false })
     if (newValues.birthDate) {
       newValues.birthDate = dayjs(newValues.birthDate);
     }
+    if (newValues.breedingStartDate) {
+      newValues.breedingStartDate = dayjs(newValues.breedingStartDate);
+    }
+    
+      if (newValues.breedingEndDate) {
+      newValues.breedingEndDate = dayjs(newValues.breedingEndDate);
+    }
+    
     
 
     console.log("newValues after removing createdAt", newValues);

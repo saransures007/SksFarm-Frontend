@@ -84,9 +84,25 @@ export const fields = {
     required: true,
     hasFeedback: true,
   },
+  isMilking: {
+    type: 'boolean', // Use toggle for isMilking
+    label: 'Is Milking',
+    required: false,
+  },
+  breedingStartDate: {
+    type: 'date',
+    label: 'Breeding Start Date',
+    required: false,
+  },
+  breedingEndDate: {
+    type: 'date',
+    label: 'Breeding End Date',
+    required: false,
+  },
   soldDate: { 
     type: 'date', 
     label: 'Sold Date', 
     required: false 
   },
+  
 };
