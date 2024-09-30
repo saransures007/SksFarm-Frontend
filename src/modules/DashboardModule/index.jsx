@@ -70,10 +70,12 @@ export default function DashboardModule() {
   // Data for monthly milk production line chart
   const dailyMilkData = cowMilkProductionResult?.chart?.dailyMilkProductionThisMonth.map(item => item.totalMilk) || Array.from({ length: new Date().getDate() }, () => 0);
   const dailySilageData = cowMilkProductionResult?.chart?.dailyMilkProductionThisMonth.map(item => item.totalSilage) || Array.from({ length: new Date().getDate() }, () => 0);
-  const daysInMonth = Array.from({ length: new Date().getDate() }, (_, index) => index + 1);
 
-  // Show only last 15 days for mobile view
-  const lineChartDays = isMobileView ? daysInMonth.slice(-15) : daysInMonth;
+
+const daysInCurrentMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
+const daysInMonth = Array.from({ length: daysInCurrentMonth }, (_, index) => index + 1);
+
+const lineChartDays = isMobileView ? daysInMonth.slice(-15) : daysInMonth;
   const lineChartMilkData = isMobileView ? dailyMilkData.slice(-15) : dailyMilkData;
   const lineChartSilageData = isMobileView ? dailySilageData.slice(-15) : dailySilageData;
 
@@ -166,8 +168,12 @@ const monthlySilageUsageData = {
       type: 'line',
       height: 350,
     },
-    xaxis: {
+   xaxis: {
       categories: lineChartDays,
+      tickAmount: lineChartDays.length, // Ensure the labels are evenly spaced
+      labels: {
+        show: true, // Ensure x-axis labels are always visible
+      },
     },
     title: {
       text: 'Monthly Silage Usage',
