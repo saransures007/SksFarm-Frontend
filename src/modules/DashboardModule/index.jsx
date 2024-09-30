@@ -67,63 +67,124 @@ export default function DashboardModule() {
     );
   });
 
-  // Weekly milk production data for the bar chart
-  const milkProductionData = {
-    series: [{
-      name: 'Milk Production (Liters)',
-      data: cowMilkProductionResult?.chart?.dailyMilkProduction || [0, 0, 0, 0, 0, 0, 0],
-    }],
-    options: {
-      chart: {
-        type: 'bar',
-        height: 350,
-      },
-      xaxis: {
-        categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      },
-      title: {
-        text: 'Daily Milk Production This Week',
-        align: 'left',
-      },
-      dataLabels: {
-        enabled: true,
-      },
-    },
-  };
-
-  // Monthly milk production data for the line chart
-  const dailyMilkData = cowMilkProductionResult?.chart?.dailyMilkProductionThisMonth || Array.from({ length: new Date().getDate() }, () => 0);
+  // Data for monthly milk production line chart
+  const dailyMilkData = cowMilkProductionResult?.chart?.dailyMilkProductionThisMonth.map(item => item.totalMilk) || Array.from({ length: new Date().getDate() }, () => 0);
+  const dailySilageData = cowMilkProductionResult?.chart?.dailyMilkProductionThisMonth.map(item => item.totalSilage) || Array.from({ length: new Date().getDate() }, () => 0);
   const daysInMonth = Array.from({ length: new Date().getDate() }, (_, index) => index + 1);
 
   // Show only last 15 days for mobile view
   const lineChartDays = isMobileView ? daysInMonth.slice(-15) : daysInMonth;
-  const lineChartData = isMobileView ? dailyMilkData.slice(-15) : dailyMilkData;
+  const lineChartMilkData = isMobileView ? dailyMilkData.slice(-15) : dailyMilkData;
+  const lineChartSilageData = isMobileView ? dailySilageData.slice(-15) : dailySilageData;
 
-  const monthlyMilkProductionData = {
-    series: [{
-      name: 'Milk Production (Liters)',
-      data: lineChartData,
-    }],
-    options: {
-      chart: {
-        type: 'line',
-        height: 350,
-      },
-      xaxis: {
-        categories: lineChartDays,
-      },
-      title: {
-        text: 'Montly Milk Production',
-        align: 'left',
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: 'smooth',
-      },
+// Data for weekly milk production bar chart
+const milkProductionData = {
+  series: [{
+    name: 'Milk Production (Liters)',
+    data: cowMilkProductionResult?.chart?.dailyMilkProduction || [0, 0, 0, 0, 0, 0, 0],
+  }],
+  options: {
+    chart: {
+      type: 'bar',
+      height: 350,
     },
-  };
+    xaxis: {
+      categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    },
+    title: {
+      text: 'Daily Milk Production This Week',
+      align: 'left',
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    colors: ['#1890ff'], // Light blue for milk production
+  },
+};
+
+const SilageUsageData = {
+  series: [{
+    name: 'Silage Usage (Kg)',
+    data: cowMilkProductionResult?.chart?.dailySilageUsage || [0, 0, 0, 0, 0, 0, 0],
+  }],
+  options: {
+    chart: {
+      type: 'bar',
+      height: 350,
+    },
+    xaxis: {
+      categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    },
+    title: {
+      text: 'Daily Silage Usage This Week',
+      align: 'left',
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    colors: ['#95de64'], // Green for silage usage
+  },
+};
+
+
+// Milk production line chart config
+const monthlyMilkProductionData = {
+  series: [{
+    name: 'Milk Production (Liters)',
+    data: lineChartMilkData,
+  }],
+  options: {
+    chart: {
+      type: 'line',
+      height: 350,
+    },
+    xaxis: {
+      categories: lineChartDays,
+    },
+    title: {
+      text: 'Monthly Milk Production',
+      align: 'left',
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: 'smooth',
+    },
+    colors: ['#1890ff'], // Light blue for milk production
+  },
+};
+
+// Silage usage line chart config
+const monthlySilageUsageData = {
+  series: [{
+    name: 'Silage Usage (Kg)',
+    data: lineChartSilageData,
+  }],
+  options: {
+    chart: {
+      type: 'line',
+      height: 350,
+    },
+    xaxis: {
+      categories: lineChartDays,
+    },
+    title: {
+      text: 'Monthly Silage Usage',
+      align: 'left',
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: 'smooth',
+    },
+    colors: ['#95de64'], // Green for silage usage
+  },
+};
+
+
+
 
   return (
     <>
@@ -169,17 +230,32 @@ export default function DashboardModule() {
       <Row gutter={[32, 32]}>
         <div className="whiteBox shadow" style={{ padding: '20px', height: '100%' }}>
           {statisticCards}
-          {/* Weekly bar chart */}
+          {/* Weekly milk production bar chart */}
           <Chart
             options={milkProductionData.options}
             series={milkProductionData.series}
             type="bar"
             height={350}
           />
-          {/* Monthly line chart */}
+           {/* Weekly milk production bar chart */}
+          <Chart
+            options={SilageUsageData.options}
+            series={SilageUsageData.series}
+            type="bar"
+            height={350}
+          />
+          {/* Monthly milk production line chart */}
           <Chart
             options={monthlyMilkProductionData.options}
             series={monthlyMilkProductionData.series}
+            type="line"
+            height={350}
+            style={{ marginTop: '20px' }}
+          />
+          {/* Monthly silage usage line chart */}
+          <Chart
+            options={monthlySilageUsageData.options}
+            series={monthlySilageUsageData.series}
             type="line"
             height={350}
             style={{ marginTop: '20px' }}
