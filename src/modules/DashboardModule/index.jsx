@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Row } from 'antd';
+import { Row, Select } from 'antd';
 import useLanguage from '@/locale/useLanguage';
 import { request } from '@/request';
 import useOnFetch from '@/hooks/useOnFetch';
@@ -10,6 +10,8 @@ import Chart from 'react-apexcharts';
 export default function DashboardModule() {
   const translate = useLanguage();
   const [isMobileView, setIsMobileView] = useState(false);
+  const [selectedFrequency, setSelectedFrequency] = useState('today'); // Default frequency
+  const [chartData, setChartData] = useState([]);
 
   const getStatsData = async ({ entity }) => {
     return await request.summary({
@@ -66,6 +68,15 @@ export default function DashboardModule() {
       />
     );
   });
+
+   // Update chart data based on selected frequency
+  useEffect(() => {
+    const updatedChartData = cowMilkProductionResult?.chart?.totalMilkProductionByCow?.map(cow => ({
+      id: cow.id,
+      totalMilk: cow.totalMilk[selectedFrequency],
+    }));
+    setChartData(updatedChartData);
+  }, [cowMilkProductionResult,selectedFrequency]);
 
   // Data for monthly milk production line chart
   const dailyMilkData = cowMilkProductionResult?.chart?.dailyMilkProductionThisMonth.map(item => item.totalMilk) || Array.from({ length: new Date().getDate() }, () => 0);
@@ -127,7 +138,33 @@ const SilageUsageData = {
     colors: ['#95de64'], // Green for silage usage
   },
 };
-
+// Chart config for milk production by cow
+  const milkProductionChartData = {
+    series: [{
+      name: 'Total Milk Production (Liters)',
+      data: chartData?.map(cow => cow.totalMilk),
+    }],
+    options: {
+      chart: {
+        type: 'line',
+        height: 350,
+      },
+      xaxis: {
+        categories: chartData?.map(cow => cow.id),
+      },
+      title: {
+        text: 'Total Milk Production by Cow',
+        align: 'left',
+      },
+      dataLabels: {
+        enabled: true,
+      },
+      stroke: {
+      curve: 'smooth',
+    },
+      colors: ['#1890ff'], // Light blue for milk production
+    },
+  };
 
 // Milk production line chart config
 const monthlyMilkProductionData = {
@@ -266,6 +303,28 @@ const monthlySilageUsageData = {
             height={350}
             style={{ marginTop: '20px' }}
           />
+
+        {/* Add a select dropdown for frequency */}
+        <Select 
+          defaultValue={selectedFrequency} 
+          style={{ width: 200, marginBottom: '20px' }} 
+          onChange={(value) => setSelectedFrequency(value)}
+        >
+          <Option value="today">Today</Option>
+          <Option value="week">This Week</Option>
+          <Option value="month">This Month</Option>
+          <Option value="year">This Year</Option>
+          <Option value="total">Total</Option>
+        </Select>
+      
+        {/* Milk production chart for each cow */}
+        <Chart
+          options={milkProductionChartData.options}
+          series={milkProductionChartData.series}
+          type="line"
+          height={350}
+        />
+      
         </div>
       </Row>
       <div className="space30"></div>

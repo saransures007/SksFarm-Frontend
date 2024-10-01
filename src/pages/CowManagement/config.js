@@ -18,6 +18,10 @@ export const fields = {
     required: true, 
     unique: true, 
   },
+  name: { 
+    type: 'string', 
+    label: 'Name', 
+  },
   breed: {
     type: 'selectWithFeedback',
     label: 'Breed',
@@ -36,6 +40,11 @@ export const fields = {
     type: 'date', 
     label: 'Entry Date', 
     required: true 
+  },
+  purchasedAmount: { 
+    type: 'number', 
+    label: 'Purchased Amount', 
+    required: true, 
   },
   origin: { 
     type: 'selectWithTranslation',
@@ -103,6 +112,10 @@ export const fields = {
     type: 'date', 
     label: 'Sold Date', 
     required: false 
+  },
+  soldAmount: { 
+    type: 'number', 
+    label: 'Sold Amount', 
   },
   
 };
