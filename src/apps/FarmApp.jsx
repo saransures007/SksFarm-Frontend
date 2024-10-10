@@ -40,15 +40,16 @@ export default function sksFarmApp() {
 
   const appSettings = useSelector(selectAppSettings);
 
+  console.log("app settings", appSettings)
   const { isSuccess: settingIsloaded } = useSelector(selectSettings);
 
-  useEffect(() => {
-    const { loadDefaultLang } = storePersist.get('firstVisit');
-    if (appSettings.sksFarm_app_language && !loadDefaultLang) {
-      dispatch(translateAction.translate(appSettings.sksFarm_app_language));
-      window.localStorage.setItem('firstVisit', JSON.stringify({ loadDefaultLang: true }));
-    }
-  }, [appSettings]);
+  // useEffect(() => {
+  //   const { loadDefaultLang } = storePersist.get('firstVisit');
+  //   if (appSettings.sksFarm_app_language && !loadDefaultLang) {
+  //     dispatch(translateAction.translate(appSettings.sksFarm_app_language));
+  //     window.localStorage.setItem('firstVisit', JSON.stringify({ loadDefaultLang: true }));
+  //   }
+  // }, [appSettings]);
   const langDirection = useSelector(selectLangDirection);
 
   if (settingIsloaded)
