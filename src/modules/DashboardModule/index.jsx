@@ -70,7 +70,6 @@ export default function DashboardModule() {
     onFetch: fetchFarmExpenseStats,
   } = useOnFetch();
 
-  console.log("farmExpenseResult", farmExpenseResult);
   useEffect(() => {
     fetchcowsStats(getStatsData({ entity: 'cow' }));
     fetchcowMilkProductionStats(getStatsData({ entity: 'cowMilkProduction' }));
@@ -114,7 +113,6 @@ export default function DashboardModule() {
 
    // Update chart data based on selected frequency
   useEffect(() => {
-    console.log("cowMilkProductionResult",cowMilkProductionResult)
     const updatedChartData = cowMilkProductionResult?.chart?.milkProductionByCow?.map(cow => ({
       id: cow.name ?  cow.name+' - ' + cow.id : 'Cow - '+cow.id,
       totalMilk: cow.milkProduction[selectedFrequency],
@@ -272,17 +270,58 @@ const monthByMonthThisYearData = {
     colors: ['#1890ff'], // Light blue for milk production
   },
 };
+const MilkVsfeedIncomeMonthData = [];
 
+// Get all unique dates from both datasets (adding safety checks)
+const allDates = [
+  ...new Set([
+    ...(totalMilkProductionResult?.dayByDayThisMonth ? totalMilkProductionResult.dayByDayThisMonth.map(item => item.date) : []),
+    ...(farmExpenseResult?.feedInventoryUsageExpense?.DailyUsageData ? farmExpenseResult.feedInventoryUsageExpense.DailyUsageData.map(item => item.date) : []),
+  ]),
+];
+
+// Iterate over each date to merge the data
+allDates.forEach(date => {
+  // Find the milk data for this date (or set defaults if not found)
+  const milkItem = (totalMilkProductionResult?.dayByDayThisMonth || []).find(item => item.date === date) || {
+    totalMilk: "0.00",
+    avgSnf: "0.00",
+    avgFat: "0.00",
+    income: "0.00",
+    ratePerLiter: "0.00"
+  };
+
+  // Find the feed expense data for this date (or set defaults if not found)
+  const feedExpenseItem = (farmExpenseResult?.feedInventoryUsageExpense?.DailyUsageData || []).find(item => item.date === date) || {
+    totalCost: "0.00"
+  };
+
+  // Add the merged data
+  MilkVsfeedIncomeMonthData.push({
+    date: date,
+    totalMilk: milkItem.totalMilk,
+    avgSnf: milkItem.avgSnf,
+    avgFat: milkItem.avgFat,
+    income: milkItem.income,
+    ratePerLiter: milkItem.ratePerLiter,
+    totalFeedCost: parseFloat(feedExpenseItem.totalCost).toFixed(2),
+  });
+});
+
+
+
+
+// // Generate the chart data based on merged data
 const dayByDayMilkVsfeedIncomeMonthData = {
   series: [
     {
       name: 'Income',
-      data: totalMilkProductionResult?.dayByDayThisMonth.map(item => parseFloat(item.income).toFixed(2)) || [0],
+      data: MilkVsfeedIncomeMonthData.map(item => parseFloat(item.income).toFixed(2)),
       color: '#52c41a', // Yellow
     },
     {
-      name: 'feed cost',
-      data: farmExpenseResult?.feedInventoryUsageExpense.DailyUsageData.map(item => parseFloat(item.totalCost).toFixed(2)) || [0],
+      name: 'Feed cost',
+      data: MilkVsfeedIncomeMonthData.map(item => parseFloat(item.totalFeedCost).toFixed(2)),
       color: '#f5222d', // Red
     }
   ],
@@ -292,10 +331,10 @@ const dayByDayMilkVsfeedIncomeMonthData = {
       height: 350,
     },
     xaxis: {
-      categories: totalMilkProductionResult?.dayByDayThisMonth.map(item => ` ${item.date}`) || [],
+      categories: MilkVsfeedIncomeMonthData.map(item => ` ${item.date}`),
     },
     title: {
-      text: 'Daily Milk Production & Quality This Month',
+      text: 'Daily Milk Income Vs Feed Cost',
       align: 'left',
     },
     dataLabels: {
@@ -305,7 +344,7 @@ const dayByDayMilkVsfeedIncomeMonthData = {
       curve: 'smooth',
       width: 2,
     },
-    colors: [ '#52c41a', '#f5222d'], // Matching series colors
+    colors: ['#52c41a', '#f5222d'], // Matching series colors
     markers: {
       size: 4,
     },
@@ -315,6 +354,7 @@ const dayByDayMilkVsfeedIncomeMonthData = {
     },
   },
 };
+
 
 const dayByDayThisMonthData = {
   series: [
@@ -374,10 +414,7 @@ const monthlyUsageCost =
   parseFloat(farmExpenseResult?.cowExpense?.monthly) + parseFloat(farmExpenseResult?.farmExpense?.monthly);
 
 const Monthlyprofit = ((parseFloat(totalMilkProductionResult?.thisMonth?.income) - monthlyUsageCost)).toFixed(2); 
-console.log((
-  parseFloat(farmExpenseResult?.feedInventoryUsageExpense?.TotalThisMonth?.totalcost)) +
-  parseFloat(farmExpenseResult?.cowExpense?.monthly) + parseFloat(farmExpenseResult?.farmExpense?.monthly)
-)
+
 const overallProfit =  parseFloat(totalMilkProductionResult?.overall?.income) - parseFloat(farmExpenseResult?.totalExpense?.overall); 
 const MonthlyRevenueFarmData = [
   { name: 'Monthly Revenue', value: totalMilkProductionResult?.thisMonth?.income, color: colorMapping.revenue },
@@ -838,7 +875,7 @@ const OverallRevenueBarChartOption = {
             type="bar"
             height={350}
           />
-                    <Chart
+          <Chart
             options={dayByDayMilkVsfeedIncomeMonthData.options}
             series={dayByDayMilkVsfeedIncomeMonthData.series}
             type="line"
