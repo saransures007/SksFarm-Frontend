@@ -66,6 +66,13 @@ export const fields = {
     disableForTable: true,
     feedback: 'motherI',
   },
+  weight: { 
+    type: 'number', 
+    label: 'weight', 
+    required: true, 
+    min: 20, 
+    max: 1000 
+  },
   expectedLiter: { 
     type: 'number', 
     label: 'Expected Liter', 

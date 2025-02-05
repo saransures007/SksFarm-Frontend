@@ -27,6 +27,7 @@ export default function DashboardModule() {
     cowExpense: 'rgb(141, 110, 99)', // Brown for cow-related expenses
     farmExpense: 'rgb(255, 152, 0)', // Orange for farm expenses
     feedExpense: 'rgb(255, 215, 0)', // Gold/yellow for feed expenses
+    feedUsageExpense: 'rgb(240, 123, 123)', // Gold/yellow for feed expenses
     totalExpense: 'rgb(255, 77, 77)', // Light red for total expenses
     overallProfit: 'rgb(0, 128, 0)', // Dark green for overall profit
     overallTotalExpense: 'rgb(255, 102, 102)', // Slightly different light red for overall total expenses
@@ -272,6 +273,49 @@ const monthByMonthThisYearData = {
   },
 };
 
+const dayByDayMilkVsfeedIncomeMonthData = {
+  series: [
+    {
+      name: 'Income',
+      data: totalMilkProductionResult?.dayByDayThisMonth.map(item => parseFloat(item.income).toFixed(2)) || [0],
+      color: '#52c41a', // Yellow
+    },
+    {
+      name: 'feed cost',
+      data: farmExpenseResult?.feedInventoryUsageExpense.DailyUsageData.map(item => parseFloat(item.totalCost).toFixed(2)) || [0],
+      color: '#f5222d', // Red
+    }
+  ],
+  options: {
+    chart: {
+      type: 'line',
+      height: 350,
+    },
+    xaxis: {
+      categories: totalMilkProductionResult?.dayByDayThisMonth.map(item => ` ${item.date}`) || [],
+    },
+    title: {
+      text: 'Daily Milk Production & Quality This Month',
+      align: 'left',
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    stroke: {
+      curve: 'smooth',
+      width: 2,
+    },
+    colors: [ '#52c41a', '#f5222d'], // Matching series colors
+    markers: {
+      size: 4,
+    },
+    tooltip: {
+      shared: true,
+      intersect: false,
+    },
+  },
+};
+
 const dayByDayThisMonthData = {
   series: [
     {
@@ -325,19 +369,32 @@ const dayByDayThisMonthData = {
   },
 };
 
+const monthlyUsageCost =
+  parseFloat(farmExpenseResult?.feedInventoryUsageExpense?.TotalThisMonth?.totalcost) +
+  parseFloat(farmExpenseResult?.cowExpense?.monthly) + parseFloat(farmExpenseResult?.farmExpense?.monthly);
 
-const Monthlyprofit = parseFloat(totalMilkProductionResult?.thisMonth?.income) - parseFloat(farmExpenseResult?.totalExpense?.monthly); 
+const Monthlyprofit = ((parseFloat(totalMilkProductionResult?.thisMonth?.income) - monthlyUsageCost)).toFixed(2); 
+console.log((
+  parseFloat(farmExpenseResult?.feedInventoryUsageExpense?.TotalThisMonth?.totalcost)) +
+  parseFloat(farmExpenseResult?.cowExpense?.monthly) + parseFloat(farmExpenseResult?.farmExpense?.monthly)
+)
 const overallProfit =  parseFloat(totalMilkProductionResult?.overall?.income) - parseFloat(farmExpenseResult?.totalExpense?.overall); 
 const MonthlyRevenueFarmData = [
   { name: 'Monthly Revenue', value: totalMilkProductionResult?.thisMonth?.income, color: colorMapping.revenue },
   { name: 'Cow Expense monthly', value: farmExpenseResult?.cowExpense?.monthly, color: colorMapping.cowExpense },
   { name: 'Farm Expense monthly', value: farmExpenseResult?.farmExpense?.monthly, color: colorMapping.farmExpense },
   { name: 'Feed Expense monthly', value: farmExpenseResult?.feedInventoryExpense?.monthly, color: colorMapping.feedExpense },
+  { name: 'FeedUsage Expense monthly', value: farmExpenseResult?.feedInventoryUsageExpense?.TotalThisMonth?.totalcost, color: colorMapping.feedUsageExpense },
 ];
+
+// const MonthlyIncomeFarmData = [
+//   { name: 'Monthly Profit', value: Monthlyprofit, color: colorMapping.profit },
+//   { name: 'Total Expense monthly', value: farmExpenseResult?.totalExpense?.monthly, color: colorMapping.totalExpense },
+// ];
 
 const MonthlyIncomeFarmData = [
   { name: 'Monthly Profit', value: Monthlyprofit, color: colorMapping.profit },
-  { name: 'Total Expense monthly', value: farmExpenseResult?.totalExpense?.monthly, color: colorMapping.totalExpense },
+  { name: 'Total Expense monthly', value: monthlyUsageCost, color: colorMapping.totalExpense },
 ];
 
 const OverallRevenueFarmData = [
@@ -509,21 +566,29 @@ const OverallRevenueBarChartOption = {
                 title={translate('Monthly Profit')}
                 tagColor={colorMapping.profit}
                 prefix={translate('Monthly profit')}
-                isLoading={totalMilkProductionLoading}
+                isLoading={farmExpenseLoading}
                 data={'₹' + Monthlyprofit}
               />
                     <SummaryCard
+                title={translate('FeedUsage Expense')}
+                tagColor={colorMapping.feedUsageExpense}
+                prefix={translate('Monthly FeedUsage')}
+                isLoading={farmExpenseLoading}
+                data={'₹' + parseFloat(farmExpenseResult?.feedInventoryUsageExpense?.TotalThisMonth?.totalcost).toFixed(2)}
+              />
+
+              <SummaryCard
                 title={translate('Total Expense')}
                 tagColor={colorMapping.totalExpense}
-                prefix={translate(' Monthly Total Expense')}
-                isLoading={totalMilkProductionLoading}
+                prefix={translate('Monthly Total Expense')}
+                isLoading={farmExpenseLoading}
                 data={'₹' + farmExpenseResult?.totalExpense?.monthly}
               />
               <SummaryCard
                 title={translate('Monthly Revenue')}
                 tagColor={colorMapping.revenue}
                 prefix={translate('Monthly Revenue')}
-                isLoading={totalMilkProductionLoading}
+                isLoading={farmExpenseLoading}
                 data={'₹' + totalMilkProductionResult?.thisMonth?.income}
               />
 
@@ -531,21 +596,21 @@ const OverallRevenueBarChartOption = {
                 title={translate('Cow Expense')}
                 tagColor={colorMapping.cowExpense}
                 prefix={translate('Monthly Cow Expense')}
-                isLoading={totalMilkProductionLoading}
+                isLoading={farmExpenseLoading}
                 data={'₹' + farmExpenseResult?.cowExpense?.monthly}
               />
               <SummaryCard
                 title={translate('Farm Expense')}
                 tagColor={colorMapping.farmExpense}
                 prefix={translate('Monthly Farm Expense')}
-                isLoading={totalMilkProductionLoading}
+                isLoading={farmExpenseLoading}
                 data={'₹' + farmExpenseResult?.farmExpense?.monthly}
               />
               <SummaryCard
                 title={translate('Feed Expense')}
                 tagColor={colorMapping.feedExpense}
                 prefix={translate('Monthly Feed')}
-                isLoading={totalMilkProductionLoading}
+                isLoading={farmExpenseLoading}
                 data={'₹' + farmExpenseResult?.feedInventoryExpense?.monthly}
               />
 
@@ -572,21 +637,21 @@ const OverallRevenueBarChartOption = {
                 title={translate('Overall Profit')}
                 tagColor={colorMapping.overallProfit}
                 prefix={translate('Overall profit')}
-                isLoading={totalMilkProductionLoading}
+                isLoading={farmExpenseLoading}
                 data={'₹' + overallProfit}
               />
                     <SummaryCard
                 title={translate('Total Expense')}
                 tagColor={colorMapping.totalExpense}
                 prefix={translate(' Overall Total Expense')}
-                isLoading={totalMilkProductionLoading}
+                isLoading={farmExpenseLoading}
                 data={'₹' + farmExpenseResult?.totalExpense?.overall}
               />
               <SummaryCard
                 title={translate('Overall Revenue')}
                 tagColor={colorMapping.revenue}
                 prefix={translate('Overall Revenue')}
-                isLoading={totalMilkProductionLoading}
+                isLoading={farmExpenseLoading}
                 data={'₹' + totalMilkProductionResult?.overall?.income}
               />
 
@@ -594,21 +659,21 @@ const OverallRevenueBarChartOption = {
                 title={translate('Cow Expense')}
                 tagColor={colorMapping.cowExpense}
                 prefix={translate('Overall Cow Expense')}
-                isLoading={totalMilkProductionLoading}
+                isLoading={farmExpenseLoading}
                 data={'₹' + farmExpenseResult?.cowExpense?.overall}
               />
               <SummaryCard
                 title={translate('Farm Expense')}
                 tagColor={colorMapping.farmExpense}
                 prefix={translate('Overall Farm Expense')}
-                isLoading={totalMilkProductionLoading}
+                isLoading={farmExpenseLoading}
                 data={'₹' + farmExpenseResult?.farmExpense?.overall}
               />
               <SummaryCard
                 title={translate('Feed Expense')}
                 tagColor={colorMapping.feedExpense}
                 prefix={translate('Overall Feed')}
-                isLoading={totalMilkProductionLoading}
+                isLoading={farmExpenseLoading}
                 data={'₹' + farmExpenseResult?.feedInventoryExpense?.overall}
               />
 
@@ -680,7 +745,7 @@ const OverallRevenueBarChartOption = {
               tagColor={'cyan'}
               prefix={translate('TMR')}
               isLoading={feedStocklevelResultLoading}
-              data={feedStocklevelResult?.totalTMRFeedStock}
+              data={feedStocklevelResult?.totalTMRFeedStock+ ' Kg'}
             />
 
             <SummaryCard
@@ -688,7 +753,7 @@ const OverallRevenueBarChartOption = {
               tagColor={'cyan'}
               prefix={translate('Pellets')}
               isLoading={feedStocklevelResultLoading}
-              data={feedStocklevelResult?.totalPelletFeedStock}
+              data={feedStocklevelResult?.totalPelletFeedStock+ ' Kg'}
             />
         </Row>
  
@@ -773,12 +838,19 @@ const OverallRevenueBarChartOption = {
             type="bar"
             height={350}
           />
+                    <Chart
+            options={dayByDayMilkVsfeedIncomeMonthData.options}
+            series={dayByDayMilkVsfeedIncomeMonthData.series}
+            type="line"
+            height={350}
+          />
           <Chart
             options={dayByDayThisMonthData.options}
             series={dayByDayThisMonthData.series}
             type="line"
             height={350}
           />
+          
         </div>
 
         <div className="whiteBox shadow" style={{ padding: '20px', height: '100%' }}>

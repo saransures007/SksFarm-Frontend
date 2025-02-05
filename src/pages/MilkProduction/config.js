@@ -9,15 +9,15 @@ export const fields = {
     required: true,
     feedback: 'totalMilk',
   },
-  avgSnf: {
-    type: 'number',
-    required: true,
-    feedback: 'avgSnf',
-  },
   avgFat: {
     type: 'number',
     required: true,
     feedback: 'avgFat',
+  },
+  avgSnf: {
+    type: 'number',
+    required: true,
+    feedback: 'avgSnf',
   },
   ratePerLiter: {
     type: 'number',
