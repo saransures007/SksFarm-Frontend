@@ -98,6 +98,11 @@
   font-weight: 700;
 }
 
+.space2 {
+  height: 2px;
+  width: 100%;
+}
+
 .space5 {
   height: 5px;
   width: 100%;

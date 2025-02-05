@@ -2,6 +2,7 @@ import CrudModule from '@/modules/CrudModule/CrudModule';
 import DynamicForm from '@/forms/DynamicForm';
 import { fields  as baseFields} from './config';
 import useLanguage from '@/locale/useLanguage';
+import dayjs from 'dayjs';
 
 export default function TotalMilkProduction() {
   const translate = useLanguage();
@@ -15,6 +16,10 @@ export default function TotalMilkProduction() {
   // Clone and modify fields to set userId as default value for "addedBy"
   const fields = {
     ...baseFields,
+    entryDate: {
+      ...baseFields.entryDate,
+      initialValue: dayjs(), // Set the initial value to the current date
+    },
     addedBy: {
       ...baseFields.addedBy,
       defaultValue: userId, // Assign the userId to the addedBy field

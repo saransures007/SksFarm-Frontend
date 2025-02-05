@@ -1,4 +1,3 @@
-
 export const fields = {
   cowId: {
     type: 'searchID',
@@ -26,53 +25,43 @@ export const fields = {
     label: 'RFID Key', 
     disableForForm: true,
   },
-  liter: {
-    type: 'number',
-    label: 'Liter',
-    required: true,
-  },
-  entryDate: {
+  date: {
     type: 'date',
-    label: 'Entry Date',
+    label: 'Expense Date',
     required: true,
   },
-  snf: {
+  type: {
+    type: 'select',
+    label: 'Expense Type',
+    options: [
+      { value: 'vaccine', label: 'Vaccine' },
+      { value: 'pregnancy_injection', label: 'Pregnancy Injection' },
+      { value: 'general_injection', label: 'General Injection' },
+      { value: 'supplement', label: 'Supplement' },
+      { value: 'tablets', label: 'Tablets' },
+      { value: 'doctor_visit', label: 'Doctor Visit' },
+      { value: 'illness_treatment', label: 'Illness Treatment' },
+      { value: 'deworming', label: 'Deworming' },
+      { value: 'feed_adjustment', label: 'Feed Adjustment' },
+      { value: 'hoof_care', label: 'Hoof Care' },
+      { value: 'other', label: 'Other' },
+    ],
+    required: true,
+  },
+  description: {
+    type: 'string',
+    label: 'Description',
+    required: true,
+  },
+  cost: {
     type: 'number',
-    label: 'SNF',
-    // required: true,
-  },
-  fat: {
-    type: 'number',
-    label: 'Fat',
-    // required: true,
-  },
-  silage: { // New field for silage
-    type: 'number', // Quantity of silage in kg (or appropriate unit)
-    label: 'Silage',
-    initialValue: 12,
-  },
-  tmrFeed: { // New field for silage
-    type: 'number', // Quantity of silage in kg (or appropriate unit)
-    label: 'TMR Feed',
-    initialValue: 8,
-
-  },
-  dryFodder: { // New field for silage
-    type: 'number', // Quantity of silage in kg (or appropriate unit)
-    label: 'Dry Fodder',
-    initialValue: 7,
-
-  },
-  pelletsFeed: { // New field for silage
-    type: 'number', // Quantity of silage in kg (or appropriate unit)
-    label: 'Pellets Feed',
-    initialValue: 0,
-
+    label: 'Cost (₹)',
+    required: true,
   },
   addedBy: {
     type: 'string',
     label: 'Added By',
-
+    required: true,
   },
   lastUpdated: {
     type: 'date',

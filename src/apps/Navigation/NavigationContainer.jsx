@@ -1,22 +1,28 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Drawer, Layout, Menu } from 'antd';
-import { GiCow } from "react-icons/gi";
-
-import { useAppContext } from '@/context/appContext';
-
-import useLanguage from '@/locale/useLanguage';
-import logoIcon from '@/style/images/logo-icon.svg';
-// import logoText from '@/style/images/logo-text.svg';
-
-import useResponsive from '@/hooks/useResponsive';
-
+import { GiCow, GiMilkCarton } from "react-icons/gi";
+import { BsUiChecksGrid } from "react-icons/bs";
 import {
   SettingOutlined,
   DashboardOutlined,
+  MoneyCollectOutlined,
   MenuOutlined,
-  CloudDownloadOutlined,
+  InfoCircleOutlined,
 } from '@ant-design/icons';
+import { LuMilk } from "react-icons/lu";
+import { GiHighGrass,GiFarmer } from "react-icons/gi";
+import { PiCowBold } from "react-icons/pi";
+import { PiFarmFill } from "react-icons/pi";
+import { RiMoneyRupeeCircleFill } from "react-icons/ri";
+
+import { useAppContext } from '@/context/appContext';
+import useLanguage from '@/locale/useLanguage';
+// import logoIcon from '@/style/images/logo-icon.svg';
+import logoIcon from '@/style/images/SKNlogo.png';
+
+// import logoText from '@/style/images/logo-text.svg';
+import useResponsive from '@/hooks/useResponsive';
 import { useSelector } from 'react-redux';
 import { selectLangDirection } from '@/redux/translate/selectors';
 
@@ -43,37 +49,63 @@ function Sidebar({ collapsible, isMobile = false }) {
   const items = [
     {
       key: 'dashboard',
-      icon: <DashboardOutlined />,
+      icon: <DashboardOutlined />, // Dashboard icon
       label: <Link to={'/'}>{translate('dashboard')}</Link>,
     },
     {
-    key: 'milkProduction',
-    icon: <CloudDownloadOutlined />,
-    label: <Link to={'/milkProduction'}>{translate('Milk Production')}</Link>,
-    },
-     {
-    key: 'cowmilkProduction',
-    icon: <CloudDownloadOutlined />,
-    label: <Link to={'/cowmilkProduction'}>{translate('Cow Milk Producion')}</Link>,
+      key: 'milkProduction',
+      icon: <LuMilk />, // Milk carton icon for milk production
+      label: <Link to={'/milkProduction'}>{translate('Milk Production')}</Link>,
     },
     {
-    key: 'CowManagement',
-    icon: <GiCow />,
-    label: <Link to={'/CowManagement'}>{translate('Cow Management')}</Link>,
+      key: 'cowExpense',
+      icon: <PiCowBold />, // Money icon for expenses
+      label: <Link to={'/cowExpense'}>{translate('Cow Expense')}</Link>,
     },
-
+    {
+      key: 'farmExpense',
+      icon: <PiFarmFill />, // Money icon for expenses
+      label: <Link to={'/farmExpense'}>{translate('Farm Expense')}</Link>,
+    },
+    {
+      key: 'feedInventory',
+      icon: <GiHighGrass />, // Money icon for expenses
+      label: <Link to={'/feedInventory'}>{translate('Feed Inventory')}</Link>,
+    },
+    {
+      key: 'feedInventory Usage',
+      icon: <GiFarmer />, // Money icon for expenses
+      label: <Link to={'/feedInventoryUsage'}>{translate('Feed Inventory Usage')}</Link>,
+    },
+    {
+      key: 'cowExamination',
+      icon: <BsUiChecksGrid />, // Money icon for expenses
+      label: <Link to={'/cowExamination'}>{translate('Cow Examination')}</Link>,
+    },
+    {
+      key: 'cowmilkProduction',
+      icon: <GiMilkCarton />, // Milk carton icon for cow milk production
+      label: <Link to={'/cowmilkProduction'}>{translate('Cow Milk Production')}</Link>,
+    },
+    {
+      key: 'CowManagement',
+      icon: <GiCow />, // Cow icon for cow management
+      label: <Link to={'/CowManagement'}>{translate('Cow Management')}</Link>,
+    },
     {
       label: translate('Settings'),
       key: 'settings',
-      icon: <SettingOutlined />,
+      icon: <SettingOutlined />, // Settings icon
       children: [
         {
           key: 'generalSettings',
-          label: <Link to={'/settings'}>{translate('settings')}</Link>,
+          icon: <SettingOutlined />, // Same as parent settings
+          label: <Link to={'/settings'}>{translate('General Settings')}</Link>,
         },
         {
           key: 'about',
-          label: <Link to={'/about'}>{translate('about')}</Link>,
+          icon: <InfoCircleOutlined />, // Info icon for about
+          label: <Link to={'/about'}>{translate('About')}</Link>,
         },
       ],
     },
@@ -134,19 +166,7 @@ function Sidebar({ collapsible, isMobile = false }) {
           cursor: 'pointer',
         }}
       >
-        <img src={logoIcon} alt="Logo" style={{ marginLeft: '-5px', height: '40px' }} />
-
-        {/* {!showLogoApp && (
-          <img
-            src={logoText}
-            alt="Logo"
-            style={{
-              marginTop: '3px',
-              marginLeft: '10px',
-              height: '38px',
-            }}
-          />
-        )} */}
+        <img src={logoIcon} alt="Logo" style={{ marginLeft: '-5px', height: '80px' }} />
       </div>
       <Menu
         items={items}

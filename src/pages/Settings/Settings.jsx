@@ -9,6 +9,7 @@ import TabsContent from '@/components/TabsContent/TabsContent';
 import CompanyLogoSettings from './CompanyLogoSettings';
 import GeneralSettings from './GeneralSettings';
 import CompanySettings from './CompanySettings';
+import Farmsettings from './Farmsettings';
 import useLanguage from '@/locale/useLanguage';
 import { useParams } from 'react-router-dom';
 
@@ -21,6 +22,12 @@ export default function Settings() {
       label: translate('General Settings'),
       icon: <SettingOutlined />,
       children: <GeneralSettings />,
+    },
+    {
+      key: 'farm_settings',
+      label: translate('Farm Settings'),
+      icon: <SettingOutlined />,
+      children: <Farmsettings />,
     },
     {
       key: 'company_settings',

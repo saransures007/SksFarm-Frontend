@@ -26,8 +26,9 @@ export const fields = {
     type: 'selectWithFeedback',
     label: 'Breed',
     options: [
-      { value: 'Sindhu', label: 'Sindhu', color: selectColor.green },
-      { value: 'Jersey', label: 'Jersey', color: selectColor.blue },
+      { value: 'Sindhu', label: 'Sindhu', color: selectColor.darkorange },
+      { value: 'Holstein Friesian (HF)', label: 'Holstein Friesian (HF)', color: selectColor.blue },
+      { value: 'Jersey', label: 'Jersey', color: selectColor.plum },
       { value: 'Shaiwal', label: 'Shaiwal', color: selectColor.orange },
       { value: 'Gir', label: 'Gir', color: selectColor.purple },
       { value: 'Cross Breed', label: 'Cross Breed', color: selectColor.magenta },
@@ -116,6 +117,16 @@ export const fields = {
   soldAmount: { 
     type: 'number', 
     label: 'Sold Amount', 
+  },
+  lastUpdated: {
+    type: 'date',
+    label: 'Last Updated',
+    disableForForm: true, // Automatically set
+  },
+  createdAt: {
+    type: 'date',
+    label: 'Created At',
+    disableForForm: true, // Automatically set
   },
   
 };

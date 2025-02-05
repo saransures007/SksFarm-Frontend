@@ -137,6 +137,15 @@ export default function UpdateForm({ config, formElements, withUpload = false })
       if (newValues.breedingEndDate) {
       newValues.breedingEndDate = dayjs(newValues.breedingEndDate);
     }
+
+    if (newValues.date) {
+      newValues.date = dayjs(newValues.date);
+    }
+    if (newValues.nextCheckupDate) {
+      newValues.nextCheckupDate = dayjs(newValues.nextCheckupDate);
+    }
+
+    
     
     
 

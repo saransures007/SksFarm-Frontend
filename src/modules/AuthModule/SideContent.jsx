@@ -1,22 +1,22 @@
 import { Space, Layout, Divider, Typography } from 'antd';
-import logo from '@/style/images/SksFarm-app-sks.svg';
 import useLanguage from '@/locale/useLanguage';
 import { useSelector } from 'react-redux';
 import { selectLangDirection } from '@/redux/translate/selectors';
+import logo from '@/style/images/SKNlogo.png';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
 export default function SideContent() {
   const translate = useLanguage();
-  const langDirection = useSelector(selectLangDirection)
+  const langDirection = useSelector(selectLangDirection);
 
   return (
     <Content
       style={{
         padding: '150px 30px 30px',
         width: '100%',
-        maxWidth: '400px',
+        maxWidth: '100%',
         margin: '0 auto',
       }}
       className="sideContent"
@@ -24,99 +24,46 @@ export default function SideContent() {
       <div style={{ width: '100%' }}>
         <img
           src={logo}
-          alt="SksFarm sks app"
+          alt="SKNFarm"
           style={{ margin: '0 auto 40px', display: 'block' }}
-          height={63}
-          width={220}
+          height={200}
+          width={200}
         />
         <div className="space40"></div>
-        <Title level={3}>{translate('Manage your company with')} :</Title>
+        <Title level={3}>Welcome to SKNFarm</Title>
 
         <div className="space20"></div>
-        <ul className="list-checked" style={{paddingRight:0}}>
+        <Text>
+          At SKNFarm, we are committed to delivering fresh, high-quality milk straight from our healthy and well-cared-for cows. Our farm is built on values of care, quality, and sustainability.
+        </Text>
+
+        <div className="space20"></div>
+        <Title level={4}>Why Choose Us?</Title>
+        <ul className="list-checked" style={{ paddingRight: 0 }}>
           <li className={`list-checked-item ${langDirection === "rtl" ? "list-checked-item-right" : "list-checked-item-left"}`}>
             <Space direction="vertical">
-              <Text strong>{translate('All-in-one tool')}</Text>
-
-              <Text>{translate('Run and scale your sks app Apps')}</Text>
+              <Text strong>Fresh & Pure</Text>
+              <Text>Milk delivered straight from our farm to your door.</Text>
             </Space>
           </li>
-
           <li className={`list-checked-item ${langDirection === "rtl" ? "list-checked-item-right" : "list-checked-item-left"}`}>
             <Space direction="vertical">
-              <Text strong>{translate('Easily add and manage your services')}</Text>
-              <Text>{translate('It brings together your invoice clients and leads')}</Text>
+              <Text strong>Healthy Cows</Text>
+              <Text>We prioritize the well-being of our cows with ethical farming practices.</Text>
+            </Space>
+          </li>
+          <li className={`list-checked-item ${langDirection === "rtl" ? "list-checked-item-right" : "list-checked-item-left"}`}>
+            <Space direction="vertical">
+              <Text strong>Sustainable Farming</Text>
+              <Text>We use eco-friendly methods to ensure a better future for our farm and the environment.</Text>
             </Space>
           </li>
         </ul>
         <Divider />
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          {/* <img
-            src={logo1}
-            alt="Logo1"
-            style={{
-              margin: '0 15px',
-              display: 'block',
-              float: 'left',
-              width: '48px',
-              filter: 'grayscale(1)',
-              mixBlendMode: 'multiply',
-              opacity: '0.8',
-            }}
-            height={48}
-            width={48}
-          />
-          <img
-            src={logo2}
-            alt="Logo2"
-            style={{
-              margin: '0 15px',
-              display: 'block',
-              float: 'left',
-              width: '48px',
-              filter: 'grayscale(1)',
-              mixBlendMode: 'multiply',
-              opacity: '0.8',
-            }}
-            height={48}
-            width={48}
-          />
-          <img
-            src={logo3}
-            alt="Logo3"
-            style={{
-              margin: '0 15px',
-              display: 'block',
-              float: 'left',
-              width: '48px',
-              filter: 'grayscale(1)',
-              mixBlendMode: 'multiply',
-              opacity: '0.8',
-            }}
-            height={48}
-            width={48}
-          />
-          <img
-            src={logo4}
-            alt="Logo4"
-            style={{
-              margin: '0 15px',
-              display: 'block',
-              float: 'left',
-              width: '48px',
-              filter: 'grayscale(1)',
-              mixBlendMode: 'multiply',
-              opacity: '0.8',
-            }}
-            height={48}
-            width={48}
-          /> */}
-        </div>
+        <Text>
+          We are dedicated to offering only the best, fresh milk with a focus on quality and care. Trust SKNFarm for all your milk needs and enjoy the natural goodness in every drop.
+        </Text>
+
       </div>
     </Content>
   );

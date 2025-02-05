@@ -1,3 +1,4 @@
+
 import { lazy } from 'react';
 
 import { Navigate } from 'react-router-dom';
@@ -8,7 +9,12 @@ const NotFound = lazy(() => import('@/pages/NotFound.jsx'));
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const MilkProduction = lazy(() => import('@/pages/MilkProduction'));
 const CowMilkProduction = lazy(() => import('@/pages/CowMilkProduction'));
+const CowExamination = lazy(() => import('@/pages/CowExamination'));
 const CowManagement = lazy(() => import('@/pages/CowManagement'));
+const  CowExpenses = lazy(() => import('@/pages/CowExpense'));
+const  FarmExpenses = lazy(() => import('@/pages/FarmExpenses'));
+const  FeedInventory = lazy(() => import('@/pages/FeedInventory'));
+const  FeedInventoryUsage = lazy(() => import('@/pages/FeedInventoryUsage'));
 
 const Settings = lazy(() => import('@/pages/Settings/Settings'));
 const AdvancedSettings = lazy(() => import('@/pages/AdvancedSettings'));
@@ -50,14 +56,39 @@ let routes = {
     {
       path: '/cowmilkProduction',
       element: <CowMilkProduction />,
-    },   
+    }, 
+    {
+      path: '/cowExamination',
+      element: <CowExamination />,
+    }, 
+    {
+      path: '/cowExpense',
+      element: <CowExpenses />,
+    }, 
+    {
+      path: '/farmExpense',
+      element: <FarmExpenses />,
+    },  
+    {
+      path: '/feedInventory',
+      element: <FeedInventory />,
+    }, 
+    {
+      path: '/feedInventoryUsage',
+      element: <FeedInventoryUsage />,
+    },  
+     
      {
       path: '/CowManagement',
       element: <CowManagement />,
     },
-
+    
     {
       path: '/settings',
+      element: <Settings />,
+    },
+    {
+      path: '/farmSettings',
       element: <Settings />,
     },
     {

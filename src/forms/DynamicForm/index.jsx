@@ -39,6 +39,7 @@ export default function DynamicForm({ fields, isUpdateForm = false }) {
   );
 }
 
+
 function FormElement({ field, feedback, setFeedback }) {
   const translate = useLanguage();
   
@@ -68,7 +69,8 @@ function FormElement({ field, feedback, setFeedback }) {
     >
       <Select
         showSearch={field.showSearch}
-        defaultValue={field.defaultValue}
+        defaultValue= {field.defaultValue  ? field.defaultValue : undefined} 
+        disabled={field?.isdisable}
         style={{
           width: '100%',
         }}
@@ -268,6 +270,7 @@ function FormElement({ field, feedback, setFeedback }) {
   );
 
   const SearchComponent = () => {
+    console.log("SearchComponent", field)
     return (
       <Form.Item
         label={translate(field.label)}
@@ -337,7 +340,7 @@ function FormElement({ field, feedback, setFeedback }) {
     url: <Input addonBefore="http://" autoComplete="off" placeholder="www.example.com" />,
     textarea: <TextArea rows={4} />,
     email: <Input autoComplete="off" placeholder="email@example.com" />,
-    number: <InputNumber style={{ width: '100%' }} />,
+    number: <InputNumber style={{ width: '100%' }} defaultValue={field.defaultValue} />,
     phone: <Input style={{ width: '100%' }} placeholder="+1 123 456 789" />,
     boolean: (
       <Switch
@@ -408,8 +411,9 @@ function FormElement({ field, feedback, setFeedback }) {
     return (
       <Form.Item
         label={translate(field.label)}
+        tooltip={ field?.tooltip ? translate(field?.tooltip): undefined}
         name={field.name}
-        initialValue={field.initialValue && field.type === 'date' ? field.initialValue : undefined}
+        initialValue={field.initialValue || field.initialValue ==0 ? field.initialValue : undefined}
         // defaultValue={field.defaultValue && field.type === 'boolean' ? field.defaultValue : undefined}
         rules={[
           {

@@ -1,12 +1,12 @@
 import CrudModule from '@/modules/CrudModule/CrudModule';
 import DynamicForm from '@/forms/DynamicForm';
-import { fields as baseFields } from './config'; // Import base fields configuration
+import { cowExaminationFields as baseFields } from './config'; // Import base fields configuration
 import useLanguage from '@/locale/useLanguage';
 import dayjs from 'dayjs';
 
-export default function CowMilkProduction() {
+export default function CowExamination() {
   const translate = useLanguage();
-  const entity = 'cowMilkProduction';
+  const entity = 'cowExamination';
 
   // Get userId from localStorage (or your preferred auth method)
   const userId = localStorage.getItem('auth')
@@ -15,37 +15,39 @@ export default function CowMilkProduction() {
 
   console.log("local", JSON.parse(localStorage.getItem('auth')));
   console.log("userId", userId);
-  
+
   const fields = {
     ...baseFields,
-    
     addedBy: {
-      ...baseFields.addedBy,
       defaultValue: userId, // Assign the userId to the addedBy field
       type: 'hidden', // Optionally hide this field
     },
     entryDate: {
       ...baseFields.entryDate,
       initialValue: dayjs(), // Set the initial value to the current date
-    }
+    },
+    nextCheckupDate: {
+      ...baseFields.nextCheckupDate,
+      initialValue: dayjs().add(30, 'days'), // Default to 30 days from today
+    },
   };
 
   console.log("fields", fields);
-  
+
   const searchConfig = {
-    displayLabels: ['id', 'earTagNumber', 'rfidKey'], // Include silage in search display
-    searchFields: 'id,earTagNumber,rfidKey', // Make silage searchable
+    displayLabels: ['id', 'cowId', 'disease', 'treatment'], // Fields to display in search
+    searchFields: 'id,cowId,disease,treatment', // Fields searchable in the module
   };
 
-  const deleteModalLabels = ['entryDate'];
+  const deleteModalLabels = ['date', 'disease', 'treatment'];
 
   const Labels = {
-    PANEL_TITLE: translate('cow_milk_production'),
-    DATATABLE_TITLE: translate('cow_milk_production_list'),
-    ADD_NEW_ENTITY: translate('add_new_cow_milk_production'),
-    ENTITY_NAME: translate('cow_milk_production'),
+    PANEL_TITLE: translate('cow_examinations'),
+    DATATABLE_TITLE: translate('cow_examinations_list'),
+    ADD_NEW_ENTITY: translate('add_new_cow_examination'),
+    ENTITY_NAME: translate('cow_examination'),
   };
-  
+
   const configPage = {
     entity,
     ...Labels,

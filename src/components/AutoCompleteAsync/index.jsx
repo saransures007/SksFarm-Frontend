@@ -20,7 +20,6 @@ export default function AutoCompleteAsync({
   onChange, /// this is for update
 }) {
   const translate = useLanguage();
-  console.log("Error here")
 
   const addNewValue = { value: 'redirectURL', label: `+ ${translate(redirectLabel)}` };
 
