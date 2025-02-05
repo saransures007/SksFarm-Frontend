@@ -9,7 +9,8 @@ import TabsContent from '@/components/TabsContent/TabsContent';
 import CompanyLogoSettings from './CompanyLogoSettings';
 import GeneralSettings from './GeneralSettings';
 import CompanySettings from './CompanySettings';
-import Farmsettings from './Farmsettings';
+import Farmsettings from './FarmSettings'; 
+
 import useLanguage from '@/locale/useLanguage';
 import { useParams } from 'react-router-dom';
 
