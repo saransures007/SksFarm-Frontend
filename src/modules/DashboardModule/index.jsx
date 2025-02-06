@@ -270,6 +270,7 @@ const monthByMonthThisYearData = {
     colors: ['#1890ff'], // Light blue for milk production
   },
 };
+
 const MilkVsfeedIncomeMonthData = [];
 
 // Get all unique dates from both datasets (adding safety checks)
@@ -307,8 +308,7 @@ allDates.forEach(date => {
     totalFeedCost: parseFloat(feedExpenseItem.totalCost).toFixed(2),
   });
 });
-
-
+MilkVsfeedIncomeMonthData.sort((a, b) => new Date(a.date) - new Date(b.date));
 
 
 // // Generate the chart data based on merged data

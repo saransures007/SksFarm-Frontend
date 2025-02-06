@@ -13,9 +13,6 @@ export default function FeedInventory() {
     ? JSON.parse(localStorage.getItem('auth')).current._id
     : null;
 
-  console.log('local', JSON.parse(localStorage.getItem('auth')));
-  console.log('userId', userId);
-
   const fields = {
     ...baseFields,
     addedBy: {
@@ -28,7 +25,7 @@ export default function FeedInventory() {
     },
   };
 
-  console.log('fields', fields);
+
 
   const searchConfig = {
     displayLabels: ['feedType', 'quantity', 'unit', 'totalCost', 'addedBy'], // Fields to display in search

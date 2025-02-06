@@ -13,8 +13,7 @@ export default function FeedInventoryUsage() {
     ? JSON.parse(localStorage.getItem('auth')).current._id
     : null;
 
-  console.log('local', JSON.parse(localStorage.getItem('auth')));
-  console.log('userId', userId);
+
 
   const fields = {
     ...baseFields,
@@ -28,7 +27,6 @@ export default function FeedInventoryUsage() {
     },
   };
 
-  console.log('fields', fields);
 
   const searchConfig = {
     displayLabels: ['feedType', 'quantityUsed', 'remainingQuantity', 'usedBy'], // Fields to display in search
