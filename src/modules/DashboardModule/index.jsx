@@ -37,21 +37,24 @@ export default function DashboardModule() {
   const parameterColorMapping = {
     milkProduction: "rgb(75, 222, 255)", // Light Blue
     eveMilkProduction:"rgb(0, 136, 199)",
-    avgSnf: "rgb(0, 188, 212)'", // Green
-    avgFat: "#faad14", // Yellow
-    ratePerLiter: "#f5222d", // Red
+    avgSnf: "rgb(0, 188, 212)", // Green
+    avgFat: "rgb(253, 224, 0)", // Yellow
+    ratePerLiter: "rgb(57, 147, 76)", // Red
     income: "#722ed1", // Purple
     totalFeedCost: "#ff4d4f", // Dark Red
     profit: "#389e0d", // Teal
     expenses: "#d46b08", // Orange
     totalCows: "#a0d911", // Lime Green
-    avgSnfEvening: "rgb(1, 143, 161)'", // Green - Represents quality (SNF) in the morning
-    avgSnfMorning: "rgb(0, 188, 212)'", // Darker Green - Evening SNF for distinction
-    avgFatMorning: "#faad14", // Yellow - Represents morning fat percentage
-    avgFatEvening: "#d48806", // Darker Yellow - Evening fat percentage
-    ratePerLiterMorning: "#f5222d", // Red - Morning rate per liter
-    ratePerLiterEvening: "#a8071a", // Dark Red - Evening rate per liter
   };
+
+  const parameterColorMappingLineChart = {
+    avgSnfEvening: "rgb(50, 67, 193)", // Green - Represents quality (SNF) in the morning
+    avgSnfMorning: "rgb(0, 188, 212)", // Darker Green - Evening SNF for distinction
+    avgFatMorning: "rgb(255, 226, 5)", // Yellow - Represents morning fat percentage
+    avgFatEvening: "rgb(247, 190, 3)", // Darker Yellow - Evening fat percentage
+    ratePerLiterMorning: "rgb(57, 147, 76)", // Red - Morning rate per liter
+    ratePerLiterEvening: "rgb(25, 225, 68)", // Dark Red - Evening rate per liter
+  }
   
 
   const getStatsData = async ({ entity }) => {
@@ -337,34 +340,32 @@ const milkQualityAndRateChartData =
     {
       name: "Morning Avg SNF",
       data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.morning.avgSnf)) || [0],
-      color: parameterColorMapping.avgSnfMorning,
+      color: parameterColorMappingLineChart.avgSnfMorning,
     },
     {
       name: "Evening Avg SNF",
       data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.evening.avgSnf)) || [0],
-      color: parameterColorMapping.avgSnfEvening,
+      color: parameterColorMappingLineChart.avgSnfEvening,
     },
     {
       name: "Morning Avg Fat",
       data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.morning.avgFat)) || [0],
-      color: parameterColorMapping.avgFatMorning,
+      color: parameterColorMappingLineChart.avgFatMorning,
     },
     {
       name: "Evening Avg Fat",
       data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.evening.avgFat)) || [0],
-      color: parameterColorMapping.avgFatEvening,
+      color: parameterColorMappingLineChart.avgFatEvening,
     },
     {
       name: "Morning Rate Per Liter",
       data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.morning.ratePerLiter)) || [0],
-      color: parameterColorMapping.ratePerLiterMorning,
-      dashArray: 5, // Dashed line to differentiate
+      color: parameterColorMappingLineChart.ratePerLiterMorning,
     },
     {
       name: "Evening Rate Per Liter",
       data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.evening.ratePerLiter)) || [0],
-      color: parameterColorMapping.ratePerLiterEvening,
-      dashArray: 5, // Dashed line to differentiate
+      color: parameterColorMappingLineChart.ratePerLiterEvening,
     }
   ],
   options: {
@@ -381,7 +382,13 @@ const milkQualityAndRateChartData =
       }
     },
     xaxis: {
+      type: 'datetime',
       categories: totalMilkProductionResult?.morningEveningData?.map(item => item.date) || [],
+      labels: {
+        style: {
+          fontSize: '10px', // Adjust the font size if needed
+        },
+      },
     },
     title: {
       text: "Daily Milk Production & Quality This Month",
@@ -394,7 +401,7 @@ const milkQualityAndRateChartData =
       curve: "smooth",
       width: 2,
     },
-    colors: Object.values(parameterColorMapping), // Automatically use defined colors
+    colors: Object.values(parameterColorMappingLineChart), // Automatically use defined colors
     markers: {
       size: 4,
     },
@@ -450,10 +457,25 @@ const milkChartData = {
     colors: [parameterColorMapping.milkProduction, parameterColorMapping.eveMilkProduction], // Morning, Evening
     plotOptions: {
       bar: {
-        columnWidth: "40%",
+        borderRadius: 5,
+        dataLabels: {
+          position: 'top', // top, center, bottom
+        },
+      }
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: function (val) {
+        return val;
+      },
+      offsetY: -20,
+      style: {
+        fontSize: '12px',
+        colors: ["#304758"]
       }
     },
     xaxis: {
+      type: 'datetime',
       categories: totalMilkProductionResult?.morningEveningData?.map(item => item.date) || [],
       title: {
         text: "Date",
@@ -508,6 +530,7 @@ const dayByDayMilkVsfeedIncomeMonthData = {
       }
     },
     xaxis: {
+      type: 'datetime',
       categories: MilkVsfeedIncomeMonthData.map(item => ` ${item.date}`),
     },
     title: {
@@ -521,7 +544,7 @@ const dayByDayMilkVsfeedIncomeMonthData = {
       curve: 'smooth',
       width: 2,
     },
-    colors: ['#52c41a', '#f5222d'], // Matching series colors
+    colors: [parameterColorMapping.profit, parameterColorMapping.ratePerLiter], // Matching series colors
     markers: {
       size: 4,
     },
@@ -569,6 +592,7 @@ const dayByDayThisMonthData = {
       }
     },
     xaxis: {
+      type: 'datetime',
       categories: totalMilkProductionResult?.dayByDayThisMonth.map(item => ` ${item.date}`) || [],
     },
     title: {
