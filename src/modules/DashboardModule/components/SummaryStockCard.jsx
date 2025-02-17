@@ -83,141 +83,143 @@ export default function SummaryStockCard({
                     >
                       {data}
                     </Tag>
-
                   </Tooltip>
-
                 </>
               )}
             </Col>
           </Row>
-          <Divider
-              style={{
-                height: '100%',
-                padding: '10px 0',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              type="vertical"
-            ></Divider>
-          <Row gutter={[3, 3]} justify="space-between" wrap={false}>
-            <Col className="gutter-row" flex="85px" style={{ textAlign: 'left' }}>
-              <div className="left" style={{ whiteSpace: 'nowrap' }}>
-                {"Stock Available:"}
-              </div>
-            </Col>
-            <Divider
-              style={{
-                height: '100%',
-                padding: '10px 0',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              type="vertical"
-            ></Divider>
-            <Col
-              className="gutter-row"
-              flex="auto"
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {isLoading ? (
-                <Spin />
-              ) : (
-                <>
-                  <Tooltip
-                    title={`Stock Available: ${stockAvailable}`}
-                    style={{
-                      direction: 'ltr',
-                    }}
-                  >
-                    <Tag
-                      color={tagColor}
+
+          {/* Conditionally render Stock Available section */}
+          {stockAvailable && (
+            <>
+              <Divider
+                style={{
+                  height: '100%',
+                  padding: '10px 0',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                type="vertical"
+              ></Divider>
+              <Row gutter={[3, 3]} justify="space-between" wrap={false}>
+                <Col className="gutter-row" flex="85px" style={{ textAlign: 'left' }}>
+                  <div className="left" style={{ whiteSpace: 'nowrap' }}>
+                    {"Stock Available:"}
+                  </div>
+                </Col>
+                <Divider
+                  style={{
+                    height: '100%',
+                    padding: '10px 0',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  type="vertical"
+                ></Divider>
+                <Col
+                  className="gutter-row"
+                  flex="auto"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  {isLoading ? (
+                    <Spin />
+                  ) : (
+                    <Tooltip
+                      title={`Stock Available: ${stockAvailable}`}
                       style={{
-                        margin: '0 auto',
-                        justifyContent: 'center',
-                        maxWidth: '110px',
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                        textOverflow: 'ellipsis',
                         direction: 'ltr',
                       }}
                     >
-                      {stockAvailable ? stockAvailable : 0 +" Bags"} 
-                    </Tag>
+                      <Tag
+                        color={tagColor}
+                        style={{
+                          margin: '0 auto',
+                          justifyContent: 'center',
+                          maxWidth: '110px',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                          direction: 'ltr',
+                        }}
+                      >
+                        {stockAvailable} Bags
+                      </Tag>
+                    </Tooltip>
+                  )}
+                </Col>
+              </Row>
+            </>
+          )}
 
-                  </Tooltip>
-
-                </>
-              )}
-            </Col>
-          </Row>
-          <Divider
-              style={{
-                height: '100%',
-                padding: '10px 0',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              type="vertical"
-            ></Divider>
-          <Row gutter={[3, 3]} justify="space-between" wrap={false}>
-            <Col className="gutter-row" flex="85px" style={{ textAlign: 'left' }}>
-              <div className="left" style={{ whiteSpace: 'nowrap' }}>
-                {"predicted Days:"}
-              </div>
-            </Col>
-            <Divider
-              style={{
-                height: '100%',
-                padding: '10px 0',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              type="vertical"
-            ></Divider>
-            <Col
-              className="gutter-row"
-              flex="auto"
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              {isLoading ? (
-                <Spin />
-              ) : (
-                <>
-                  <Tooltip
-                    title={`PredictedDays : ${predictedDays}`}
-                    style={{
-                      direction: 'ltr',
-                    }}
-                  >
-                    <Tag
-                      color={tagColor}
+          {/* Conditionally render Predicted Days section */}
+          {predictedDays && (
+            <>
+              <Divider
+                style={{
+                  height: '100%',
+                  padding: '10px 0',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                type="vertical"
+              ></Divider>
+              <Row gutter={[3, 3]} justify="space-between" wrap={false}>
+                <Col className="gutter-row" flex="85px" style={{ textAlign: 'left' }}>
+                  <div className="left" style={{ whiteSpace: 'nowrap' }}>
+                    {"Predicted Days:"}
+                  </div>
+                </Col>
+                <Divider
+                  style={{
+                    height: '100%',
+                    padding: '10px 0',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  type="vertical"
+                ></Divider>
+                <Col
+                  className="gutter-row"
+                  flex="auto"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  {isLoading ? (
+                    <Spin />
+                  ) : (
+                    <Tooltip
+                      title={`Predicted Days: ${predictedDays}`}
                       style={{
-                        margin: '0 auto',
-                        justifyContent: 'center',
-                        maxWidth: '110px',
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                        textOverflow: 'ellipsis',
                         direction: 'ltr',
                       }}
                     >
-                      {predictedDays ? predictedDays : 0 +" Days"} 
-                    </Tag>
-
-                  </Tooltip>
-
-                </>
-              )}
-            </Col>
-          </Row>
+                      <Tag
+                        color={tagColor}
+                        style={{
+                          margin: '0 auto',
+                          justifyContent: 'center',
+                          maxWidth: '110px',
+                          overflow: 'hidden',
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                          direction: 'ltr',
+                        }}
+                      >
+                        {predictedDays} Days
+                      </Tag>
+                    </Tooltip>
+                  )}
+                </Col>
+              </Row>
+            </>
+          )}
         </div>
       </div>
     </Col>
