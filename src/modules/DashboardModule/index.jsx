@@ -332,7 +332,7 @@ allDates.forEach(date => {
   });
 });
 MilkVsfeedIncomeMonthData.sort((a, b) => new Date(a.date) - new Date(b.date));
-console.log("totalMilkProductionResult?.morningEveningData", totalMilkProductionResult)
+console.log("MilkVsfeedIncomeMonthData", MilkVsfeedIncomeMonthData)
 const milkQualityAndRateChartData = 
 
 {
@@ -376,11 +376,16 @@ const milkQualityAndRateChartData =
     },
     animations: {
       enabled: true,
-      easing: 'linear',
+      speed: 100,
+      animateGradually: {
+          enabled: true,
+          delay: 150
+      },
       dynamicAnimation: {
-        speed: 1000
+          enabled: true,
+          speed: 350
       }
-    },
+  },
     xaxis: {
       type: 'datetime',
       categories: totalMilkProductionResult?.morningEveningData?.map(item => {
