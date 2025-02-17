@@ -383,7 +383,12 @@ const milkQualityAndRateChartData =
     },
     xaxis: {
       type: 'datetime',
-      categories: totalMilkProductionResult?.morningEveningData?.map(item => item.date) || [],
+      categories: totalMilkProductionResult?.morningEveningData?.map(item => {
+        const date = new Date(item.date);
+        const offset = date.getTimezoneOffset() * 30000; // Get the timezone offset in milliseconds
+        return new Date(date.getTime() - offset).getTime();  // Adjust for the timezone offset and get the timestamp
+      }) || [],  // Convert to timestamp
+      timezone: 'Asia/Kolkata',
       labels: {
         style: {
           fontSize: '10px', // Adjust the font size if needed
@@ -476,7 +481,12 @@ const milkChartData = {
     },
     xaxis: {
       type: 'datetime',
-      categories: totalMilkProductionResult?.morningEveningData?.map(item => item.date) || [],
+      categories: totalMilkProductionResult?.morningEveningData?.map(item => {
+        const date = new Date(item.date);
+        const offset = date.getTimezoneOffset() * 30000; // Get the timezone offset in milliseconds
+        return new Date(date.getTime() - offset).getTime();  // Adjust for the timezone offset and get the timestamp
+      }) || [],  // Convert to timestamp
+      timezone: 'Asia/Kolkata',
       title: {
         text: "Date",
       },
@@ -531,7 +541,12 @@ const dayByDayMilkVsfeedIncomeMonthData = {
     },
     xaxis: {
       type: 'datetime',
-      categories: MilkVsfeedIncomeMonthData.map(item => ` ${item.date}`),
+      categories: MilkVsfeedIncomeMonthData.map(item => {
+        const date = new Date(item.date);
+        const offset = date.getTimezoneOffset() * 30000; // Get the timezone offset in milliseconds
+        return new Date(date.getTime() - offset).getTime();  // Adjust for the timezone offset and get the timestamp
+      }) || [],  // Convert to timestamp
+      timezone: 'Asia/Kolkata',
     },
     title: {
       text: 'Daily Milk Income Vs Feed Cost',
@@ -593,8 +608,14 @@ const dayByDayThisMonthData = {
     },
     xaxis: {
       type: 'datetime',
-      categories: totalMilkProductionResult?.dayByDayThisMonth.map(item => ` ${item.date}`) || [],
+      categories: totalMilkProductionResult?.dayByDayThisMonth.map(item => {
+        const date = new Date(item.date);
+        const offset = date.getTimezoneOffset() * 30000; // Get the timezone offset in milliseconds
+        return new Date(date.getTime() - offset).getTime();  // Adjust for the timezone offset and get the timestamp
+      }) || [],  // Convert to timestamp
+      timezone: 'Asia/Kolkata',
     },
+    
     title: {
       text: "Daily Milk Production & Quality This Month",
       align: "left",
