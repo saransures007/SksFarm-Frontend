@@ -1019,9 +1019,9 @@ const OverallRevenueBarChartOption = {
 
 
             <SummaryStockCard
-              title={translate('Silage Stock')}
+              title={translate('TMR Stock')}
               tagColor={'green'}
-              prefix={translate('Silage :')}
+              prefix={translate('TMR :')}
               isLoading={feedStocklevelResultLoading}
               stockAvailable={feedStocklevelResult?.totalTMRPackages}
               predictedDays={feedStocklevelResult?.predictedTMRDays}
@@ -1030,9 +1030,9 @@ const OverallRevenueBarChartOption = {
 
 
             <SummaryStockCard
-              title={translate('Silage Stock')}
+              title={translate('Pellets Stock')}
               tagColor={'green'}
-              prefix={translate('Silage :')}
+              prefix={translate('Pellets :')}
               isLoading={feedStocklevelResultLoading}
               stockAvailable={feedStocklevelResult?.totalPelletPackages}
               predictedDays={feedStocklevelResult?.predictedPelletDays}
