@@ -34,6 +34,26 @@ export default function DashboardModule() {
   };
   
 
+  const parameterColorMapping = {
+    milkProduction: "rgb(75, 222, 255)", // Light Blue
+    eveMilkProduction:"rgb(0, 136, 199)",
+    avgSnf: "rgb(0, 188, 212)'", // Green
+    avgFat: "#faad14", // Yellow
+    ratePerLiter: "#f5222d", // Red
+    income: "#722ed1", // Purple
+    totalFeedCost: "#ff4d4f", // Dark Red
+    profit: "#389e0d", // Teal
+    expenses: "#d46b08", // Orange
+    totalCows: "#a0d911", // Lime Green
+    avgSnfEvening: "rgb(1, 143, 161)'", // Green - Represents quality (SNF) in the morning
+    avgSnfMorning: "rgb(0, 188, 212)'", // Darker Green - Evening SNF for distinction
+    avgFatMorning: "#faad14", // Yellow - Represents morning fat percentage
+    avgFatEvening: "#d48806", // Darker Yellow - Evening fat percentage
+    ratePerLiterMorning: "#f5222d", // Red - Morning rate per liter
+    ratePerLiterEvening: "#a8071a", // Dark Red - Evening rate per liter
+  };
+  
+
   const getStatsData = async ({ entity }) => {
     return await request.summary({
       entity,
@@ -309,6 +329,156 @@ allDates.forEach(date => {
   });
 });
 MilkVsfeedIncomeMonthData.sort((a, b) => new Date(a.date) - new Date(b.date));
+console.log("totalMilkProductionResult?.morningEveningData", totalMilkProductionResult)
+const milkQualityAndRateChartData = 
+
+{
+  series: [
+    {
+      name: "Morning Avg SNF",
+      data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.morning.avgSnf)) || [0],
+      color: parameterColorMapping.avgSnfMorning,
+    },
+    {
+      name: "Evening Avg SNF",
+      data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.evening.avgSnf)) || [0],
+      color: parameterColorMapping.avgSnfEvening,
+    },
+    {
+      name: "Morning Avg Fat",
+      data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.morning.avgFat)) || [0],
+      color: parameterColorMapping.avgFatMorning,
+    },
+    {
+      name: "Evening Avg Fat",
+      data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.evening.avgFat)) || [0],
+      color: parameterColorMapping.avgFatEvening,
+    },
+    {
+      name: "Morning Rate Per Liter",
+      data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.morning.ratePerLiter)) || [0],
+      color: parameterColorMapping.ratePerLiterMorning,
+      dashArray: 5, // Dashed line to differentiate
+    },
+    {
+      name: "Evening Rate Per Liter",
+      data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.evening.ratePerLiter)) || [0],
+      color: parameterColorMapping.ratePerLiterEvening,
+      dashArray: 5, // Dashed line to differentiate
+    }
+  ],
+  options: {
+    chart: {
+      type: "line",
+      height: 400, // Ensure enough height for a single-line legend
+      width: "100%", // Adjust width dynamically
+    },
+    animations: {
+      enabled: true,
+      easing: 'linear',
+      dynamicAnimation: {
+        speed: 1000
+      }
+    },
+    xaxis: {
+      categories: totalMilkProductionResult?.morningEveningData?.map(item => item.date) || [],
+    },
+    title: {
+      text: "Daily Milk Production & Quality This Month",
+      align: "left",
+    },
+    dataLabels: {
+      enabled: true,
+    },
+    stroke: {
+      curve: "smooth",
+      width: 2,
+    },
+    colors: Object.values(parameterColorMapping), // Automatically use defined colors
+    markers: {
+      size: 4,
+    },
+    tooltip: {
+      shared: true,
+      intersect: false,
+    },
+    legend: {
+      position: "top", // Ensure all legends stay at the top
+      horizontalAlign: "center", // Align legends in a single row
+      floating: false, // Prevents legends from floating separately
+      itemMargin: {
+        horizontal: 10, // Adds space to avoid overlapping
+        vertical: 5,
+      },
+    },
+    // yaxis: [
+    //   {
+    //     title: {
+    //       text: "SNF & Fat (%)",
+    //     },
+    //   },
+    //   {
+    //     opposite: true,
+    //     title: {
+    //       text: "Rate Per Liter (₹)",
+    //     },
+    //   }
+    // ],
+  },
+}
+
+
+
+const milkChartData = {
+  series: [
+    {
+      name: "Morning Total Milk (L)",
+      type: "column",
+      data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.morning.totalMilk)) || [0],
+    },
+    {
+      name: "Evening Total Milk (L)",
+      type: "column",
+      data: totalMilkProductionResult?.morningEveningData?.map(item => parseFloat(item.evening.totalMilk)) || [0],
+    }
+  ],
+  options: {
+    chart: {
+      type: "bar",
+      height: 400,
+    },
+    colors: [parameterColorMapping.milkProduction, parameterColorMapping.eveMilkProduction], // Morning, Evening
+    plotOptions: {
+      bar: {
+        columnWidth: "40%",
+      }
+    },
+    xaxis: {
+      categories: totalMilkProductionResult?.morningEveningData?.map(item => item.date) || [],
+      title: {
+        text: "Date",
+      },
+    },
+    yaxis: {
+      title: {
+        text: "Milk Quantity (L)",
+      },
+    },
+    title: {
+      text: "Milk Production (Morning vs Evening)",
+      align: "left",
+    },
+    legend: {
+      position: "bottom",
+    },
+    tooltip: {
+      shared: true,
+      intersect: false,
+    },
+  },
+};
+
+
 
 
 // // Generate the chart data based on merged data
@@ -329,6 +499,13 @@ const dayByDayMilkVsfeedIncomeMonthData = {
     chart: {
       type: 'line',
       height: 350,
+    },
+    animations: {
+      enabled: true,
+      easing: 'linear',
+      dynamicAnimation: {
+        speed: 1000
+      }
     },
     xaxis: {
       categories: MilkVsfeedIncomeMonthData.map(item => ` ${item.date}`),
@@ -359,46 +536,53 @@ const dayByDayMilkVsfeedIncomeMonthData = {
 const dayByDayThisMonthData = {
   series: [
     {
-      name: 'Milk Production (Liters)',
+      name: "Milk Production (Liters)",
       data: totalMilkProductionResult?.dayByDayThisMonth.map(item => item.totalMilk) || [0],
-      color: '#1890ff', // Light blue
+      color: parameterColorMapping.milkProduction,
     },
     {
-      name: 'Avg SNF',
+      name: "Avg SNF",
       data: totalMilkProductionResult?.dayByDayThisMonth.map(item => item.avgSnf) || [0],
-      color: '#52c41a', // Green
+      color: parameterColorMapping.avgSnf,
     },
     {
-      name: 'Avg Fat',
+      name: "Avg Fat",
       data: totalMilkProductionResult?.dayByDayThisMonth.map(item => item.avgFat) || [0],
-      color: '#faad14', // Yellow
+      color: parameterColorMapping.avgFat,
     },
     {
-      name: 'Rate Per Liter',
+      name: "Rate Per Liter",
       data: totalMilkProductionResult?.dayByDayThisMonth.map(item => item.ratePerLiter) || [0],
-      color: '#f5222d', // Red
-    }
+      color: parameterColorMapping.ratePerLiter,
+    },
   ],
   options: {
     chart: {
-      type: 'line',
+      type: "line",
       height: 350,
+    },
+    animations: {
+      enabled: true,
+      easing: 'linear',
+      dynamicAnimation: {
+        speed: 1000
+      }
     },
     xaxis: {
       categories: totalMilkProductionResult?.dayByDayThisMonth.map(item => ` ${item.date}`) || [],
     },
     title: {
-      text: 'Daily Milk Production & Quality This Month',
-      align: 'left',
+      text: "Daily Milk Production & Quality This Month",
+      align: "left",
     },
     dataLabels: {
       enabled: true,
     },
     stroke: {
-      curve: 'smooth',
+      curve: "smooth",
       width: 2,
     },
-    colors: ['#1890ff', '#52c41a', '#faad14', '#f5222d'], // Matching series colors
+    colors: Object.values(parameterColorMapping), // Automatically use defined colors
     markers: {
       size: 4,
     },
@@ -408,6 +592,7 @@ const dayByDayThisMonthData = {
     },
   },
 };
+
 
 const monthlyUsageCost =
   parseFloat(farmExpenseResult?.feedInventoryUsageExpense?.TotalThisMonth?.totalcost) +
@@ -875,15 +1060,18 @@ const OverallRevenueBarChartOption = {
             type="bar"
             height={350}
           />
-          <Chart
-            options={dayByDayMilkVsfeedIncomeMonthData.options}
-            series={dayByDayMilkVsfeedIncomeMonthData.series}
-            type="line"
-            height={350}
-          />
+          <Chart options={milkChartData.options} series={milkChartData.series} type="bar" height={400} />
+          <Chart options={milkQualityAndRateChartData.options} series={milkQualityAndRateChartData.series} type="line" height={400} />
           <Chart
             options={dayByDayThisMonthData.options}
             series={dayByDayThisMonthData.series}
+            type="line"
+            height={350}
+          />
+
+          <Chart
+            options={dayByDayMilkVsfeedIncomeMonthData.options}
+            series={dayByDayMilkVsfeedIncomeMonthData.series}
             type="line"
             height={350}
           />
