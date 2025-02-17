@@ -16,6 +16,8 @@ import { FaFeatherAlt } from 'react-icons/fa'; // For "Feed" related icon
 import { PieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
 import { SiHappycow } from "react-icons/si";
 import { FaLeaf } from "react-icons/fa";
+import AnalyticSummaryStockCard from './components/SummaryStockCard';
+import SummaryStockCard from './components/SummaryStockCard';
 export default function DashboardModule() {
   const translate = useLanguage();
   const [isMobileView, setIsMobileView] = useState(false);
@@ -1004,27 +1006,36 @@ const OverallRevenueBarChartOption = {
         </h3>
       <div className="space2"></div>
         <Row gutter={[32, 32]}>
-            <SummaryCard
+
+            <SummaryStockCard
               title={translate('Silage Stock')}
               tagColor={'green'}
-              prefix={translate('Silage')}
+              prefix={translate('Silage :')}
               isLoading={feedStocklevelResultLoading}
+              stockAvailable={feedStocklevelResult?.totalSilagePackages}
+              predictedDays={feedStocklevelResult?.predictedSilageDays}
               data={feedStocklevelResult?.totalSilageStock+ ' Kg'}
             />
 
-            <SummaryCard
-              title={translate('TMR Stock')}
-              tagColor={'cyan'}
-              prefix={translate('TMR')}
+
+            <SummaryStockCard
+              title={translate('Silage Stock')}
+              tagColor={'green'}
+              prefix={translate('Silage :')}
               isLoading={feedStocklevelResultLoading}
+              stockAvailable={feedStocklevelResult?.totalTMRPackages}
+              predictedDays={feedStocklevelResult?.predictedTMRDays}
               data={feedStocklevelResult?.totalTMRFeedStock+ ' Kg'}
             />
 
-            <SummaryCard
-              title={translate('Pellets Stock')}
-              tagColor={'cyan'}
-              prefix={translate('Pellets')}
+
+            <SummaryStockCard
+              title={translate('Silage Stock')}
+              tagColor={'green'}
+              prefix={translate('Silage :')}
               isLoading={feedStocklevelResultLoading}
+              stockAvailable={feedStocklevelResult?.totalPelletPackages}
+              predictedDays={feedStocklevelResult?.predictedPelletDays}
               data={feedStocklevelResult?.totalPelletFeedStock+ ' Kg'}
             />
         </Row>
